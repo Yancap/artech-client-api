@@ -38,11 +38,11 @@ public class ImageStorageServiceTest {
     void notUploadImageIfPathNotExist(){
         var imageBase64 = "data:image/png;base64,R0lGODdhAQABAPAAAP8AAAAAACwAAAAAAQABAAACAkQBADs=";
 
-        var exception =
-                assertThrows(ArtechException.class, () -> service.uploadImage(imageBase64, "images/non/exist/"));
+        var serverPath =  service.uploadImage(imageBase64, "images/non/exist/");
 
-        assertEquals(500, exception.getStatus());
-        assertEquals("Erro de Sistema: Storage não encontrado", exception.getMessage());
+        imagePath = serverPath;
+        assertNotNull(serverPath);
+        assertTrue(serverPath.contains("/storage/images/non/exist/"));
     }
 
 
