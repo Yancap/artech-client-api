@@ -84,16 +84,20 @@ public class ImageStorageService {
 
             String currentDir = new File("").getAbsolutePath();
             File storageDir = new File(currentDir + storagePath + path);
+            System.out.println("storageDir: " + storageDir);
             File imagePath = new File(storageDir + "/" + randomUidName + "." + extension);
+            System.out.println("imagePath: " + imagePath);
             String serverPath = "/storage/" + path + randomUidName + "." + extension;
+            System.out.println("serverPath: " + serverPath);
 
             byte[] decodedImageBlob = Base64.getDecoder().decode(
                     extractBase64(imageBase64).getBytes(StandardCharsets.UTF_8)
             );
 
             File file = new File(storageDir.getAbsolutePath());
-
+            System.out.println("File Exist: " + file.exists());
             if (!file.exists()) {
+                System.out.println("MkDir");
                 file.mkdirs();
             }
             
@@ -104,6 +108,7 @@ public class ImageStorageService {
             imageOutput.close();
             return serverPath;
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
             var error = new ArtechError();
             error.setType(TypeError.ERROR);
             error.setMessage("Erro de Sistema: Storage não encontrado");

@@ -1,17 +1,15 @@
 package com.github.yancap.artech.services;
 
-import com.github.yancap.artech.TestSqlScriptExecutor;
-import com.github.yancap.artech.persistence.dto.article.ArticleEntityDTO;
-import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+import com.github.yancap.artech.TestSqlScriptExecutor;
+
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 
 @QuarkusTest
@@ -40,7 +38,7 @@ public class SearchEngineServiceTest {
     @Test
     @DisplayName("it should be able to search all articles by a hashtag")
     void searchArticleByHashtag(){
-        var hashtag = "#node#js";
+        var hashtag = "node,js";
         var articles = service.searchArticleByTag(hashtag);
         assertEquals(2, articles.size());
     }

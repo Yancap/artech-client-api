@@ -6,7 +6,8 @@ public record CommentDTO(
         Long id,
         String text,
         String createdAt,
-        String userName
+        String userName,
+        String userEmail
 ) {
 
     public CommentDTO(Comment comment){
@@ -14,7 +15,8 @@ public record CommentDTO(
                 comment.getId(),
                 comment.getText(),
                 comment.getCreatedAt().toString(),
-                comment.getUser().getName()
+                comment.getUser().getName(),
+                comment.getUser().getEmail()
         );
     }
 }

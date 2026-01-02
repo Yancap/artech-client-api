@@ -120,7 +120,7 @@ public class ArticleResourceTest {
         var response = given()
                 .contentType(ContentType.JSON)
                 .when()
-                .queryParam("hashtag", "#node#js")
+                .queryParam("hashtags", "node,js")
                 .get("search")
                 .then()
                 .statusCode(200)

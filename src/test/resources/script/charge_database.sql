@@ -126,7 +126,7 @@ INSERT INTO comments (article_id, created_at, id, user_id, text)
 INSERT INTO comments (article_id, created_at, id, user_id, text)
   VALUES (100, CURRENT_DATE, 300, 100, 'Comentário Teste 3');
 
-INSERT INTO tags (id, tag) VALUES (100, 'nodejs');
+INSERT INTO tags (id, tag) VALUES (100, 'node');
 INSERT INTO tags (id, tag) VALUES (200, 'js');
 INSERT INTO articles_tags (article_id, tag_id) VALUES (101, 100);
 INSERT INTO articles_tags (article_id, tag_id) VALUES (102, 200);

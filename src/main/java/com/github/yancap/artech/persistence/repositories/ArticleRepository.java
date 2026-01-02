@@ -1,15 +1,14 @@
 package com.github.yancap.artech.persistence.repositories;
 
-import com.github.yancap.artech.persistence.dto.article.ArticleDTO;
+import java.util.List;
+
 import com.github.yancap.artech.persistence.dto.article.ArticleEntityDTO;
 import com.github.yancap.artech.persistence.models.Article;
 import com.github.yancap.artech.persistence.models.Category;
 import com.github.yancap.artech.utils.enums.ArticleStates;
+
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-
-import java.util.Arrays;
-import java.util.List;
 
 @ApplicationScoped
 public class ArticleRepository implements PanacheRepository<Article> {
@@ -17,9 +16,9 @@ public class ArticleRepository implements PanacheRepository<Article> {
     public List<ArticleEntityDTO> queryEngine(String queryParam) {
 
         var slicedQueryParam = queryParam.split("[\\s\\d\\W]+");
-        var titleQuery = "LOWER(title) LIKE ";
-        var subtitleQuery = "LOWER(subtitle) LIKE ";
-        var textQuery = "LOWER(text) LIKE ";
+        var titleQuery = "LOWER(a.title) LIKE ";
+        var subtitleQuery = "LOWER(a.subtitle) LIKE ";
+        var textQuery = "LOWER(a.text) LIKE ";
         var tagQuery = "tag LIKE ";
         var categoryQuery = "category LIKE ";
         for (int i = 0; i < slicedQueryParam.length; i++){
@@ -29,52 +28,55 @@ public class ArticleRepository implements PanacheRepository<Article> {
             tagQuery = tagQuery + "'%" + slicedQueryParam[i] + "%'";
             categoryQuery = categoryQuery + "'%" + slicedQueryParam[i] + "%'";
             if (i != (slicedQueryParam.length - 1)) {
-                titleQuery = titleQuery + " OR LOWER(title) LIKE ";
-                subtitleQuery = subtitleQuery + " OR LOWER(subtitle) LIKE ";
-                textQuery = textQuery + " OR LOWER(text) LIKE ";
+                titleQuery = titleQuery + " OR LOWER(a.title) LIKE ";
+                subtitleQuery = subtitleQuery + " OR LOWER(a.subtitle) LIKE ";
+                textQuery = textQuery + " OR LOWER(a.text) LIKE ";
                 tagQuery = tagQuery + " OR tag LIKE ";
                 categoryQuery = categoryQuery + " AND category LIKE ";
             }
         }
 
-
-        var nativeQuery = "SELECT * FROM articles WHERE current_state = 'active' AND (" + titleQuery +
+        
+        var nativeQuery = "SELECT a.*, m.name FROM articles AS a, managements AS m"
+        + " WHERE a.current_state = 'active' AND (" + titleQuery +
                 " OR " + subtitleQuery +
                 " OR " + textQuery +
-            "OR id IN (" +
+            " OR a.id IN (" +
                 "SELECT article_id FROM articles_tags WHERE tag_id IN (" +
                     "select id from tags where " + tagQuery +
                     ")" +
                 ")" +
-            "OR category_id IN (" +
+            " OR a.category_id IN (" +
                 "SELECT id FROM categories WHERE " + categoryQuery +
-            "));" ;
-                var result = getEntityManager()
-                .createNativeQuery(nativeQuery)
-                .getResultList();
-        return (List<ArticleEntityDTO>) result;
+            ")) AND a.manager_id = m.id;" ;
+        List<ArticleEntityDTO> result = getEntityManager()
+            .createNativeQuery(nativeQuery, ArticleEntityDTO.class)
+            .getResultList();
+        
+        return result;
     }
 
     public List<ArticleEntityDTO> queryEngineByTag(String tag) {
 
+        //Split de caracteres especiais
         var slicedQueryParam = tag.split("[\\s\\d\\W]+");
-        var tagQuery = "tag LIKE ";
+        var tagQuery = "tag = ";
         for (int i = 0; i < slicedQueryParam.length; i++){
-            tagQuery = tagQuery + "'%" + slicedQueryParam[i] + "%'";
+            tagQuery = tagQuery + "'" + slicedQueryParam[i] + "'";
             if (i != (slicedQueryParam.length - 1)) {
-                tagQuery = tagQuery + " OR tag LIKE ";
+                tagQuery = tagQuery + " OR tag = ";
             }
         }
 
 
-        var nativeQuery = "SELECT * FROM articles WHERE " +
-                "id IN (" +
+        var nativeQuery = "SELECT a.*, m.name FROM articles AS a, managements AS m WHERE a.current_state = 'active' AND" +
+                " a.id IN (" +
                     "SELECT article_id FROM articles_tags WHERE tag_id IN (" +
                         "select id from tags where " + tagQuery +
                     ")" +
-                ");" ;
-        var result = getEntityManager()
-                .createNativeQuery(nativeQuery)
+                ") AND a.manager_id = m.id;" ;
+        List<ArticleEntityDTO> result = getEntityManager()
+                .createNativeQuery(nativeQuery, ArticleEntityDTO.class)
                 .getResultList();
         return (List<ArticleEntityDTO>) result;
     }

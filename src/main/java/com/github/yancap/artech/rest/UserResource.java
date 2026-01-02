@@ -46,13 +46,17 @@ public class UserResource {
         String protocol = uriInfo.getRequestUri().getScheme(); // "http" ou "https"
         String serverName = uriInfo.getRequestUri().getHost(); // Nome do servidor (localhost, IP ou domínio)
         int serverPort = uriInfo.getRequestUri().getPort(); // Número da porta
+        System.out.println("protocol: "+protocol);
+        System.out.println("serverName: "+serverName);
+        System.out.println("serverPort: "+serverPort);
 
         String currentServerURL;
         if (serverPort > 0) {
             currentServerURL = protocol + "://" + serverName + ":" + serverPort;  
         } else {
-            currentServerURL = protocol + "://" + serverName + "/cms";  
+            currentServerURL = protocol + "://" + serverName + "/client";  
         }
+        System.out.println("currentServerURL: "+currentServerURL);
         userService.register(dto, currentServerURL);
         return Response.status(201).build();
     }
@@ -66,13 +70,17 @@ public class UserResource {
         String protocol = uriInfo.getRequestUri().getScheme(); // "http" ou "https"
         String serverName = uriInfo.getRequestUri().getHost(); // Nome do servidor (localhost, IP ou domínio)
         int serverPort = uriInfo.getRequestUri().getPort(); // Número da porta
+        System.out.println("protocol: "+protocol);
+        System.out.println("serverName: "+serverName);
+        System.out.println("serverPort: "+serverPort);
 
         String currentServerURL;
         if (serverPort > 0) {
             currentServerURL = protocol + "://" + serverName + ":" + serverPort;  
         } else {
-            currentServerURL = protocol + "://" + serverName + "/cms";  
+            currentServerURL = protocol + "://" + serverName + "/client";  
         }
+        System.out.println("currentServerURL: "+currentServerURL);
         userService.changeAvatar(dto, user.email(), currentServerURL);
         return Response.status(204).build();
     }

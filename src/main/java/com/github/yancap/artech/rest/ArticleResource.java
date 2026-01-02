@@ -38,10 +38,10 @@ public class ArticleResource {
     @Path("search")
     public Response searchArticles(
             @QueryParam("q") String query,
-            @QueryParam("hashtag") String hashtag
+            @QueryParam("hashtags") String hashtags
     ){
-        if (hashtag != null) {
-            var articles = searchEngineService.searchArticleByTag(hashtag);
+        if (hashtags != null) {
+            var articles = searchEngineService.searchArticleByTag(hashtags);
             return Response.ok(articles).build();
 
         } else if (query != null) {
