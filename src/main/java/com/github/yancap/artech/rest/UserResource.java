@@ -43,21 +43,8 @@ public class UserResource {
     @POST
     @Path("register")
     public Response register(UserRegisterDTO dto) {
-        String protocol = uriInfo.getRequestUri().getScheme(); // "http" ou "https"
-        String serverName = uriInfo.getRequestUri().getHost(); // Nome do servidor (localhost, IP ou domínio)
-        int serverPort = uriInfo.getRequestUri().getPort(); // Número da porta
-        System.out.println("protocol: "+protocol);
-        System.out.println("serverName: "+serverName);
-        System.out.println("serverPort: "+serverPort);
-
-        String currentServerURL;
-        if (serverPort > 0) {
-            currentServerURL = protocol + "://" + serverName + ":" + serverPort;  
-        } else {
-            currentServerURL = protocol + "://" + serverName + "/client";  
-        }
-        System.out.println("currentServerURL: "+currentServerURL);
-        userService.register(dto, currentServerURL);
+       
+        userService.register(dto);
         return Response.status(201).build();
     }
 
@@ -67,21 +54,8 @@ public class UserResource {
     @RolesAllowed({ "User" })
     public Response changeAvatar(ChangeAvatarRequestDTO dto, @Context SecurityContext ctx) {
         var user = authService.validateToken(ctx, jwt);
-        String protocol = uriInfo.getRequestUri().getScheme(); // "http" ou "https"
-        String serverName = uriInfo.getRequestUri().getHost(); // Nome do servidor (localhost, IP ou domínio)
-        int serverPort = uriInfo.getRequestUri().getPort(); // Número da porta
-        System.out.println("protocol: "+protocol);
-        System.out.println("serverName: "+serverName);
-        System.out.println("serverPort: "+serverPort);
-
-        String currentServerURL;
-        if (serverPort > 0) {
-            currentServerURL = protocol + "://" + serverName + ":" + serverPort;  
-        } else {
-            currentServerURL = protocol + "://" + serverName + "/client";  
-        }
-        System.out.println("currentServerURL: "+currentServerURL);
-        userService.changeAvatar(dto, user.email(), currentServerURL);
+        
+        userService.changeAvatar(dto, user.email());
         return Response.status(204).build();
     }
 

@@ -48,7 +48,6 @@ public class UserServiceTest {
     @Test
     @DisplayName("it should be able to register an user")
     void registerUser(){
-        var currentServer = "localhost:8080";
         UserRegisterDTO dto = new UserRegisterDTO(
                 "John User",
                 "johnuser@email.com",
@@ -59,7 +58,7 @@ public class UserServiceTest {
         when(
                 mockImageStorageService.uploadImage(anyString(), anyString())
         ).thenReturn("teste.png");
-        service.register(dto, currentServer);
+        service.register(dto);
         var userCreated = repository.findByEmail("johnuser@email.com");
         assertNotNull(userCreated);
         assertEquals(userCreated.getName(), dto.name());
@@ -71,7 +70,6 @@ public class UserServiceTest {
     @Test
     @DisplayName("it should be able to register an user even without avatar")
     void registerUserWithoutAvatar(){
-        var currentServer = "localhost:8080";
         UserRegisterDTO dto = new UserRegisterDTO(
                 "John User",
                 "johnuser@email.com",
@@ -79,7 +77,7 @@ public class UserServiceTest {
                 null
         );
 
-        service.register(dto, currentServer);
+        service.register(dto);
         var userCreated = repository.findByEmail("johnuser@email.com");
         assertNotNull(userCreated);
         assertEquals(userCreated.getName(), dto.name());
@@ -92,7 +90,6 @@ public class UserServiceTest {
     @Test
     @DisplayName("it should not be able to register an user if exist")
     void dontRegisterUserIfExist(){
-        var currentServer = "localhost:8080";
         UserRegisterDTO dto = new UserRegisterDTO(
                 "Usuario",
                 "usuario@email.com",
@@ -100,7 +97,7 @@ public class UserServiceTest {
                 ""
         );
 
-        assertThrows(ArtechException.class, () -> service.register(dto, currentServer));
+        assertThrows(ArtechException.class, () -> service.register(dto));
 
     }
 
@@ -135,9 +132,10 @@ public class UserServiceTest {
                 "data:image/png;base64,R0lGODdhAQABAPAAAP8AAAAAACwAAAAAAQABAAACAkQBADs="
         );
 
-        service.changeAvatar(dto, "usuario@email.com", "localhost:8080");
+        service.changeAvatar(dto, "usuario@email.com");
         var userChangedAvatar = repository.findByEmail("usuario@email.com");
-        assertEquals(userChangedAvatar.getUrlAvatar(), "localhost:8080null");
+        System.out.println(userChangedAvatar.getUrlAvatar());
+        assertEquals(userChangedAvatar.getUrlAvatar(), null);
 
     }
 
@@ -149,7 +147,7 @@ public class UserServiceTest {
         );
 
         assertThrows(ArtechException.class, () ->
-                service.changeAvatar(dto, "notExist@email.com", "localhost:8080")
+                service.changeAvatar(dto, "notExist@email.com")
         );
 
     }

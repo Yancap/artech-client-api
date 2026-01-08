@@ -1,12 +1,15 @@
 package com.github.yancap.artech.rest;
 
+import java.io.File;
+
 import com.github.yancap.artech.services.ImageStorageService;
+
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.*;
-
-
-import java.io.File;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
 
 @Path("storage/")
 @Produces({"image/png", "image/jpg", "image/jpeg"})

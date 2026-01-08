@@ -85,10 +85,10 @@ ENV LANGUAGE='en_US:en'
 # ARG DB_PASSWORD_ARG
 # ARG QUARKUS_HTTP_PORT_ARG
 
-ENV DB_USERNAME=$DB_USERNAME
-ENV DB_PASSWORD=$DB_PASSWORD
-ENV DB_URL=$DB_URL
-ENV QUARKUS_HTTP_PORT=$QUARKUS_HTTP_PORT
+# ENV DB_USERNAME=$DB_USERNAME
+# ENV DB_PASSWORD=$DB_PASSWORD
+# ENV DB_URL=$DB_URL
+# ENV QUARKUS_HTTP_PORT=$QUARKUS_HTTP_PORT
 
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
@@ -97,6 +97,8 @@ COPY --chown=185 target/quarkus-app/*.jar /deployments/
 COPY --chown=185 target/quarkus-app/app/ /deployments/app/
 COPY --chown=185 target/quarkus-app/quarkus/ /deployments/quarkus/
 COPY --chown=185 target/classes/utils/ /deployments/src/main/resources/utils/
+
+RUN mkdir -p /deployments/storage/
 
 EXPOSE 8080
 USER 185

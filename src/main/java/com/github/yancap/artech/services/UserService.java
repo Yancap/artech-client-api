@@ -25,7 +25,7 @@ public class UserService {
     @Inject
     private AuthService authService;
 
-    public void register(UserRegisterDTO dto, String currentServerURL){
+    public void register(UserRegisterDTO dto){
         var user = userRepository.findByEmail(dto.email());
         if (user != null) {
             var error = new ArtechError();
@@ -36,8 +36,7 @@ public class UserService {
         }
         String urlAvatar = "";
         if (!(dto.imageBlob() == null || dto.imageBlob().isBlank())) {
-            urlAvatar =
-                currentServerURL + imageStorageService.uploadImage(dto.imageBlob(), "images/users/");
+            urlAvatar = imageStorageService.uploadImage(dto.imageBlob(), "images/users/");
         }
         var userCreated = new User();
         var hashPassword = authService.generateHashPassword(dto.password());
@@ -69,7 +68,7 @@ public class UserService {
 
     }
 
-    public void changeAvatar(ChangeAvatarRequestDTO dto, String email, String currentServerURL){
+    public void changeAvatar(ChangeAvatarRequestDTO dto, String email){
         var user = userRepository.findByEmail(email);
         if (user == null) {
             var error = new ArtechError();
@@ -80,8 +79,7 @@ public class UserService {
             throw new ArtechException(error);
         }
 
-        String urlAvatar =
-                currentServerURL + imageStorageService.uploadImage(dto.imageBlob(), "images/users/");
+        String urlAvatar = imageStorageService.uploadImage(dto.imageBlob(), "images/users/");
 
         user.setUrlAvatar(urlAvatar);
         userRepository.persist(user);
