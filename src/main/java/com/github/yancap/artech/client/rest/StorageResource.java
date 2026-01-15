@@ -1,0 +1,46 @@
+package com.github.yancap.artech.client.rest;
+
+import java.io.File;
+
+import com.github.yancap.artech.client.services.ImageStorageService;
+
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+
+@Path("client/storage/")
+@Produces(MediaType.MEDIA_TYPE_WILDCARD)
+//@Produces(MediaType.TEXT_PLAIN)
+public class StorageResource {
+
+    @Inject
+    ImageStorageService imageStorageService;
+
+    @GET
+    @Path("images/users/{pathImage}")
+    @Transactional
+    public byte[] usersImage(
+            @PathParam("pathImage") String pathImage
+    ) {
+        try {
+            String currentDir = new File("").getAbsolutePath();
+            System.out.println("currentDir: " + currentDir);
+            String storageDir = new File(currentDir + "/storage/images/users/").getAbsolutePath();
+            System.out.println("storageDir: " + storageDir);
+            String imagePath = new File(storageDir + "\\" + pathImage).getCanonicalPath();
+            System.out.println("imagePath: " + imagePath);
+
+            return imageStorageService.readImage("/images/users/" + pathImage);
+        } catch (Throwable e) {
+
+            return null;
+        }
+    }
+
+
+
+}
