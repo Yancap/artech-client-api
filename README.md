@@ -1,4 +1,5 @@
 #Artech Client API
+
 O Artech Client API é um microsserviço back-end desenvolvido com Quarkus, responsável pela disponibilização dos conteúdos publicados da plataforma Artech para o Artech Web Client, além do gerenciamento de acesso dos usuários clientes da aplicação.
 
 Este serviço atua de forma independente do Artech CMS API, separando claramente as responsabilidades entre os usuários administrativos (administradores e autores, gerenciados pelo CMS) e os usuários clientes, que consomem os conteúdos publicados. Essa separação garante maior segurança, organização do domínio e escalabilidade da arquitetura como um todo.
